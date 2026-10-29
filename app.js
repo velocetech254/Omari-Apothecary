@@ -18,6 +18,7 @@
     })[character]);
 
   const normalize = (value) => value.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const additionalItemName = (item) => typeof item === "string" ? item : item.name;
 
   const setupContact = () => {
     const phone = catalogue.phone;
@@ -57,7 +58,7 @@
         categoryFilters.querySelectorAll("button").forEach((filter) => {
           filter.setAttribute("aria-pressed", String(filter === button));
         });
-        renderProducts();
+        renderCatalogue();
       });
     });
   };
@@ -94,36 +95,46 @@
     `;
   };
 
-  const renderProducts = () => {
+  const renderCatalogue = () => {
     const query = normalize(catalogueSearch.value.trim());
     const filtered = catalogue.products.filter((product) => {
       const matchesCategory = activeCategory === "All" || product.category === activeCategory;
       const searchable = normalize([product.name, product.category, ...product.benefits].join(" "));
       return matchesCategory && searchable.includes(query);
     });
+    const additionalCount = catalogue.additionalCatalogue.reduce((count, group) => {
+      const matchesCategory = normalize(group.category).includes(query);
+      return count + (matchesCategory
+        ? group.items.length
+        : group.items.filter((item) => normalize(additionalItemName(item)).includes(query)).length);
+    }, 0);
 
-    resultsLabel.textContent = `${filtered.length} ${filtered.length === 1 ? "product" : "products"}`;
+    resultsLabel.textContent = `${filtered.length} ${filtered.length === 1 ? "product" : "products"} · ${additionalCount} more catalogue ${additionalCount === 1 ? "item" : "items"}`;
     clearSearch.hidden = !catalogueSearch.value;
     productGrid.innerHTML = filtered.length
       ? filtered.map(productCard).join("")
-      : `<div class="empty-state"><strong>No products found</strong>Try another name, note or category.</div>`;
+      : additionalCount
+        ? ""
+        : `<div class="empty-state"><strong>No catalogue matches found</strong>Try another name, note or category.</div>`;
+    additionalGrid.innerHTML = catalogue.additionalCatalogue.map((group) => {
+      const matchesCategory = normalize(group.category).includes(query);
+      const items = matchesCategory
+        ? group.items
+        : group.items.filter((item) => normalize(additionalItemName(item)).includes(query));
+      return items.length ? `
+        <article class="additional-card">
+          <h3>${escapeHtml(group.category)}</h3>
+          <ul class="chip-list">
+            ${items.map((item) => `<li>${escapeHtml(additionalItemName(item))}</li>`).join("")}
+          </ul>
+        </article>
+      ` : "";
+    }).join("");
   };
-
-  const renderAdditionalCatalogue = () => {
-    additionalGrid.innerHTML = catalogue.additionalCatalogue.map((group) => `
-      <article class="additional-card">
-        <h3>${escapeHtml(group.category)}</h3>
-        <ul class="chip-list">
-          ${group.items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
-        </ul>
-      </article>
-    `).join("");
-  };
-  catalogueSearch.addEventListener("input", renderProducts);
-  catalogueSearch.addEventListener("input", renderProducts);
+  catalogueSearch.addEventListener("input", renderCatalogue);
   clearSearch.addEventListener("click", () => {
     catalogueSearch.value = "";
-    renderProducts();
+    renderCatalogue();
     catalogueSearch.focus();
   });
   document.addEventListener("keydown", (event) => {
@@ -135,6 +146,5 @@
 
   setupContact();
   renderFilters();
-  renderProducts();
-  renderAdditionalCatalogue();
+  renderCatalogue();
 })();

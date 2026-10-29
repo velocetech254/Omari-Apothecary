@@ -9,6 +9,7 @@
     >
     <meta name="theme-color" content="#183b2c">
     <title>Omari Apothecary — Natural Organics &amp; Remedies</title>
+    <link rel="icon" type="image/png" href="catalogue-mark.png">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
@@ -25,6 +26,12 @@
         <a href="#more-catalogue">More products</a>
         <a class="nav-contact" href="#contact">Get in touch <span aria-hidden="true">↗</span></a>
       </nav>
+      <label class="search-box">
+        <span class="visually-hidden">Search all products and catalogue items</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
+        <input id="catalogue-search" type="search" placeholder="Search the website" autocomplete="off">
+        <kbd>/</kbd>
+      </label>
     </header>
 
     <main>
@@ -64,12 +71,6 @@
 
         <div class="catalogue-tools">
           <div class="filter-row" id="category-filters" role="group" aria-label="Filter products by category"></div>
-          <label class="search-box">
-            <span class="visually-hidden">Search catalogue</span>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
-            <input id="catalogue-search" type="search" placeholder="Search products or notes" autocomplete="off">
-            <kbd>/</kbd>
-          </label>
         </div>
 
         <div class="results-line">
