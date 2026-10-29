@@ -51,7 +51,6 @@ a {
   height: 82px;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
 }
 
 .brand {
@@ -888,20 +887,8 @@ h2 em,
     width: min(100% - 44px, 760px);
   }
 
-  .site-header {
-    height: auto;
-    min-height: 82px;
-    flex-wrap: wrap;
-    gap: 12px 18px;
-    padding: 12px 0;
-  }
-
   .main-nav {
     gap: 18px;
-  }
-
-  .site-header .search-box {
-    flex: 1 1 270px;
   }
 
   .hero {
@@ -938,11 +925,7 @@ h2 em,
   }
 
   .site-header {
-    height: auto;
-    min-height: 70px;
-    flex-wrap: wrap;
-    gap: 12px;
-    padding: 12px 0;
+    height: 70px;
   }
 
   .main-nav {
@@ -956,12 +939,6 @@ h2 em,
   .main-nav .nav-contact {
     padding: 9px 10px;
     font-size: 10px;
-  }
-
-  .site-header .search-box {
-    order: 3;
-    width: 100%;
-    flex: 1 0 100%;
   }
 
   .hero {
@@ -1027,9 +1004,14 @@ h2 em,
 
   .catalogue-tools {
     align-items: stretch;
-    flex-direction: column;
+    flex-direction: column-reverse;
     gap: 15px;
     margin-top: 25px;
+  }
+
+  .search-box {
+    width: 100%;
+    flex-basis: 38px;
   }
 
   .filter-row {
